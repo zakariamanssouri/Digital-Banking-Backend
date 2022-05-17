@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import ma.enset.digitalbanking.enums.AccountStatus;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class BankAccount {
     @ManyToOne
     private Customer customer;
 
-    @OneToMany(mappedBy = "bankAccount")
-    private List<AccountOperation> accountOperations;
+    @OneToMany(mappedBy = "bankAccount",fetch = FetchType.EAGER)
+    private List<AccountOperation> accountOperations = new ArrayList<>();
 
 }
