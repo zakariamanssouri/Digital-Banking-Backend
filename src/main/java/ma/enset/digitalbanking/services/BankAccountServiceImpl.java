@@ -34,9 +34,23 @@ public class BankAccountServiceImpl implements BankAccountService {
 
 
     @Override
-    public Customer saveCustomer(Customer customer) {
-        log.info("Saving a new customer");
-        return customerRepository.save(customer);
+    public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
+        Customer customer = DTOMapper.fromCustomerDTO(customerDTO);
+        Customer savedCustomer = customerRepository.save(customer);
+        return DTOMapper.fromCustomer(savedCustomer);
+    }
+
+
+    @Override
+    public CustomerDTO updateCustomer(CustomerDTO customerDTO) {
+        Customer customer = DTOMapper.fromCustomerDTO(customerDTO);
+        Customer savedCustomer = customerRepository.save(customer);
+        return DTOMapper.fromCustomer(savedCustomer);
+    }
+
+    @Override
+    public void deleteCustomer(Long id){
+        customerRepository.deleteById(id);
     }
 
     @Override
@@ -124,5 +138,11 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Override
     public List<BankAccount> bankAccountsList() {
         return bankAccountRepository.findAll();
+    }
+
+    @Override
+    public CustomerDTO getCustomer(Long customerId) throws CustomerNotFoundException {
+        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new CustomerNotFoundException("customer not found"));
+        return DTOMapper.fromCustomer(customer);
     }
 }
